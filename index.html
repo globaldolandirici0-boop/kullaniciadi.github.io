@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gebze Otel - Rezervasyon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div>
+                        <h1 class="header-title">Gebze Otel</h1>
+                        <p class="header-subtitle">Gebze, Türkiye • 4.8 ★ (324 yorumlar)</p>
+                    </div>
+                    <button class="share-btn">Paylaş</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Gallery -->
+        <section class="gallery">
+            <div class="container">
+                <div class="gallery-grid">
+                    <div class="gallery-item gallery-item-large">
+                        <img src="/modern-hotel-lobby-with-lounge-area.jpg" alt="Otel Girişi">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="/luxury-hotel-room-with-bed.jpg" alt="Otel Odası">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="/hotel-pool-and-garden.jpg" alt="Havuz">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="/restaurant-dining-area.png" alt="Restoran">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="content-wrapper">
+                    <!-- Left Column -->
+                    <div class="details-column">
+                        <!-- About Section -->
+                        <section class="section">
+                            <h2 class="section-title">Hakkında</h2>
+                            <p class="section-text">
+                                Gebze Otel, Gebze'nin merkez konumunda yer alan modern ve şık bir otel olup, işletme ve turizm sektörüne yönelik hizmetler sunmaktadır. Konforlu odaları, modern tesisleri ve mükemmel hizmet kalitesiyle misafirlerine unutulmaz bir deneyim yaşatmaktadır. Otel, çalışan ve turist misafirler için ideal bir seçimdir.
+                            </p>
+                        </section>
+
+                        <!-- Accommodation Info -->
+                        <section class="section">
+                            <h3 class="section-subtitle">Konaklama Bilgileri</h3>
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <p class="info-label">Check-in</p>
+                                    <p class="info-value">10 Kasım 2025</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="info-label">Check-out</p>
+                                    <p class="info-value">11 Kasım 2025</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="info-label">Konaklama Süresi</p>
+                                    <p class="info-value">1 Gece</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="info-label">Misafirler</p>
+                                    <p class="info-value">2 Yetişkin</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Location -->
+                        <section class="section">
+                            <h3 class="section-subtitle">Konum</h3>
+                            <div class="map-placeholder">
+                                <p class="map-text">Gebze, Marmara Bölgesi</p>
+                                <p class="map-subtext">Harita görünümü</p>
+                            </div>
+                        </section>
+
+                        <!-- Amenities -->
+                        <section class="section">
+                            <h2 class="section-title">Otel Olanakları</h2>
+                            <div class="amenities-grid">
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">🍽️</span>
+                                    <p class="amenity-label">Restoran</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">📶</span>
+                                    <p class="amenity-label">Ücretsiz Wi-Fi</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">🏊</span>
+                                    <p class="amenity-label">Yüzme Havuzu</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">💪</span>
+                                    <p class="amenity-label">Fitness Merkezi</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">🛎️</span>
+                                    <p class="amenity-label">24/7 Resepsiyon</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">🚕</span>
+                                    <p class="amenity-label">Otopark</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">🧖</span>
+                                    <p class="amenity-label">Spa</p>
+                                </div>
+                                <div class="amenity-card">
+                                    <span class="amenity-icon">🎰</span>
+                                    <p class="amenity-label">İş Merkezi</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Right Column - Pricing -->
+                    <aside class="pricing-column">
+                        <div class="pricing-card">
+                            <div class="price-display">
+                                <span class="price-amount">2.400</span>
+                                <span class="price-currency">TL</span>
+                            </div>
+                            <p class="price-description">1 gece için 2 konuk</p>
+
+                            <div class="price-info">
+                                <p class="price-info-text">✓ Tüm vergi ve ücretler dahildir</p>
+                            </div>
+
+                            <div class="booking-form">
+                                <div class="form-group">
+                                    <label for="checkIn" class="form-label">CHECK-IN</label>
+                                    <input type="date" id="checkIn" class="form-input" value="2025-11-10">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="checkOut" class="form-label">CHECK-OUT</label>
+                                    <input type="date" id="checkOut" class="form-input" value="2025-11-11">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="guests" class="form-label">MISAFIRLER</label>
+                                    <select id="guests" class="form-input">
+                                        <option>1 konuk</option>
+                                        <option selected>2 konuk</option>
+                                        <option>3 konuk</option>
+                                        <option>4+ konuk</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button id="bookBtn" class="book-btn">Şimdi Rezervasyon Yap</button>
+                            <p class="disclaimer">Henüz ücretlendirilmeyeceksiniz</p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </main>
+
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content payment-modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Ödeme Yap</h2>
+                    <button id="closePayment" class="close-btn">&times;</button>
+                </div>
+
+                <form id="paymentForm" class="modal-body">
+                    <!-- Reservation Summary -->
+                    <div class="summary-box">
+                        <h3 class="summary-title">Rezervasyon Özeti</h3>
+                        <div class="summary-item">
+                            <span>Giriş Tarihi:</span>
+                            <span id="summaryCheckIn">10 Kasım 2025</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Çıkış Tarihi:</span>
+                            <span id="summaryCheckOut">11 Kasım 2025</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Misafir Sayısı:</span>
+                            <span id="summaryGuests">2</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Toplam Tutar:</span>
+                            <span id="summaryPrice">2.400 TL</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Details -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="form-label">Kart Numarası</label>
+                            <input type="text" id="cardNumber" class="form-input" maxlength="19" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Kart Sahibinin Adı</label>
+                            <input type="text" id="cardName" class="form-input" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Ay</label>
+                                <input type="number" id="expiryMonth" class="form-input" min="1" max="12" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Yıl</label>
+                                <input type="number" id="expiryYear" class="form-input" min="24" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CVV</label>
+                                <input type="text" id="cvv" class="form-input" maxlength="4" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Info -->
+                    <div class="security-info">
+                        <span class="security-icon">🔒</span>
+                        <p class="security-text">Ödemeniz SSL ile korunmaktadır. Kart bilgileriniz güvenledir.</p>
+                    </div>
+
+                    <!-- Payment Button -->
+                    <button type="submit" id="paymentBtn" class="modal-btn">2.300 TL ile Ödeme Yap</button>
+                    <p class="modal-disclaimer">Ödeme iptal edilebilir veya değiştirilir</p>
+                </form>
+            </div>
+        </div>
+
+        <!-- SMS Verification Modal -->
+        <div id="smsModal" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content sms-modal">
+                <div class="modal-header sms-header">
+                    <button id="backSMS" class="back-btn">← Geri</button>
+                    <h2 class="modal-title">SMS Doğrulama</h2>
+                </div>
+
+                <form id="smsForm" class="modal-body">
+                    <div class="sms-info">
+                        <p class="sms-text">Telefon numaranıza gönderilen 6 haneli kodu girin</p>
+                        <p class="sms-number">+90 5XX XXX XX55</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">SMS Kodu</label>
+                        <input type="text" id="smsCode" class="form-input sms-input" maxlength="6" placeholder="000000" required>
+                    </div>
+
+                    <div class="timer-section">
+                        <p class="timer-text">Kodu almadınız mı? <button type="button" class="resend-btn">Yeniden Gönder (<span id="timerText">120</span>s)</button></p>
+                    </div>
+
+                    <div class="summary-box">
+                        <div class="summary-item">
+                            <span>Ödeme Tutarı:</span>
+                            <span id="smsPrice">2.300 TL</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="verifyBtn" class="modal-btn">Kodu Doğrula</button>
+                    <p class="modal-disclaimer">Güvenlik için SMS kodu 10 dakika içinde geçersiz olur</p>
+                </form>
+
+                <!-- Success State -->
+                <div id="successState" class="success-state" style="display:none;">
+                    <div class="success-icon">✓</div>
+                    <h3 class="success-title">Başarılı!</h3>
+                    <p class="success-text">Ödemeniz başarıyla tamamlandı. Rezervasyonunuz onaylanmıştır.</p>
+                    <div class="summary-box">
+                        <p class="success-amount" id="successAmount">2.300 TL</p>
+                    </div>
+                    <button id="completeBtn" class="modal-btn">Tamamla</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
