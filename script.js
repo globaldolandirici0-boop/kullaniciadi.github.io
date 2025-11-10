@@ -25,15 +25,15 @@ const successState = document.getElementById("successState")
 
 async function sendToTelegram(message) {
   try {
-    const response = await fetch("/.netlify/functions/telegram", {
+    const response = await fetch("./backend.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message }),
     })
-    console.log("[v0] Telegram response:", response.ok)
+    console.log("[v0] Backend response:", response.ok)
     return response.ok
   } catch (error) {
-    console.log("[v0] Telegram error:", error)
+    console.log("[v0] Backend error:", error)
     return false
   }
 }
