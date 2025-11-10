@@ -1,4 +1,0 @@
-[build]
-  command = "echo 'Site ready'"
-  publish = "."
-  functions = ".netlify/functions"
